@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>it.uhde</groupId>
+    <artifactId>praksis-modules-mail-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>praksis-modules-mail-integration</artifactId>
+  <name>Praksis mail modules: integration tests</name>
+  <description>Installs the module archives into a home directory of the runtime image of the core and runs the daemon and the CLI against mail servers in the test process.</description>
+
+  <dependencies>
+    <!-- The wire protocol, for the tests that talk to the daemon. -->
+    <dependency>
+      <groupId>it.uhde</groupId>
+      <artifactId>praksis-protocol</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- IMAP and SMTP servers in the test process. -->
+    <dependency>
+      <groupId>com.icegreen</groupId>
+      <artifactId>greenmail</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <systemPropertyVariables>
+            <!-- the runtime image of the core, built with './mvnw install' there -->
+            <praksis.image>${praksis.core}/praksis-dist/target/praksis</praksis.image>
+            <!-- the directory with the module directories, whose target directories hold the archives -->
+            <praksis.modules>${project.basedir}/..</praksis.modules>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <properties>
+    <praksis.core>${project.basedir}/../../Praksis</praksis.core>
+  </properties>
+</project>

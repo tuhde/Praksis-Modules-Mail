@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>it.uhde</groupId>
+    <artifactId>praksis-modules-mail-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>praksis-module-contacts</artifactId>
+  <properties>
+    <module.name>contacts</module.name>
+  </properties>
+
+  <name>Praksis module: contacts</name>
+  <description>An address book: the people a person writes to and hears from, with search for completion.</description>
+
+  <dependencies>
+    <!-- Provided by the engine's boot layer at run time. -->
+    <dependency>
+      <groupId>it.uhde</groupId>
+      <artifactId>praksis-capability-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.angus</groupId>
+      <artifactId>angus-mail</artifactId>
+    </dependency>
+
+    <!-- The address book; the driver is the engine's. -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Tests load the built module the way the daemon does. -->
+    <dependency>
+      <groupId>it.uhde</groupId>
+      <artifactId>praksis-engine</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- The module as an archive for 'praksis modules install': its jar, the jars it needs (not the
+           ones the daemon provides) and module.toml, flat in one zip. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>module-jars</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/archive</outputDirectory>
+              <includeScope>runtime</includeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>${maven-antrun-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>module-archive</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <copy file="${project.build.directory}/${project.build.finalName}.jar" todir="${project.build.directory}/archive"/>
+                <copy file="${project.basedir}/module.toml" todir="${project.build.directory}/archive"/>
+                <zip destfile="${project.build.directory}/${module.name}.praksis-module" basedir="${project.build.directory}/archive"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

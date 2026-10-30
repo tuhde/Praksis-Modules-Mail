@@ -1,0 +1,36 @@
+format_version = 1
+name = "contacts"
+version = "0.1.0"
+module = "it.uhde.praksis.module.contacts"
+jdk_modules = ["java.desktop", "java.logging", "java.sql", "java.xml", "org.xerial.sqlitejdbc"]
+
+# The people a person writes to and hears from. Rules add addresses (the sender of a mail that is
+# not spam, the recipients of a mail that was sent); a form searches them as a person types.
+[[capability]]
+name = "contacts.add"
+effect = "local-write"
+dry_run = true
+params = [
+  { name = "addresses", type = "string", required = true, scopable = false },
+]
+results = [
+  { name = "seen", type = "int", required = true },
+  { name = "added", type = "int", required = true },
+]
+
+[[capability]]
+name = "contacts.search"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "query", type = "string", required = true, scopable = false },
+  { name = "limit", type = "int", required = false, scopable = false },
+]
+results = [{ name = "items", type = "list", required = true }]
+
+[[capability]]
+name = "contacts.remove"
+effect = "destructive"
+dry_run = true
+params = [{ name = "address", type = "string", required = true, scopable = true }]
+results = [{ name = "removed", type = "bool", required = true }]

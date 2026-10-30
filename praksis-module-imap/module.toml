@@ -1,0 +1,169 @@
+format_version = 1
+name = "imap"
+version = "0.1.0"
+module = "it.uhde.praksis.module.imap"
+jdk_modules = ["java.desktop", "java.logging", "java.sql", "java.xml", "org.xerial.sqlitejdbc"]
+sources = ["imap.inbox"]
+
+[[capability]]
+name = "mail.move"
+effect = "local-write"
+dry_run = true
+params = [
+  { name = "message", type = "string", required = true, scopable = false },
+  { name = "folder", type = "string", required = true, scopable = true },
+]
+results = [{ name = "message", type = "string", required = true }]
+
+[[capability]]
+name = "mail.folders"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+]
+results = [{ name = "folders", type = "list", required = true }]
+
+[[capability]]
+name = "mail.list"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+  { name = "folder", type = "string", required = true, scopable = true },
+  { name = "limit", type = "int", required = false, scopable = false },
+  { name = "offset", type = "int", required = false, scopable = false },
+  { name = "sort", type = "string", required = false, scopable = false },
+  { name = "reverse", type = "bool", required = false, scopable = false },
+  { name = "threaded", type = "bool", required = false, scopable = false },
+]
+results = [
+  { name = "items", type = "list", required = true },
+  { name = "count", type = "int", required = true },
+]
+
+
+[[capability]]
+name = "mail.search"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+  { name = "folder", type = "string", required = true, scopable = true },
+  { name = "query", type = "string", required = true, scopable = false },
+  { name = "in", type = "string", required = false, scopable = false },
+  { name = "limit", type = "int", required = false, scopable = false },
+]
+results = [
+  { name = "items", type = "list", required = true },
+  { name = "count", type = "int", required = true },
+]
+
+[[capability]]
+name = "mail.mark"
+effect = "local-write"
+dry_run = true
+params = [
+  { name = "message", type = "string", required = true, scopable = false },
+  { name = "seen", type = "bool", required = false, scopable = false },
+  { name = "flagged", type = "bool", required = false, scopable = false },
+]
+results = [{ name = "message", type = "string", required = true }]
+
+[[capability]]
+name = "mail.delete"
+effect = "destructive"
+dry_run = true
+params = [{ name = "message", type = "string", required = true, scopable = false }]
+results = [{ name = "deleted", type = "bool", required = true }]
+
+[[capability]]
+name = "mail.attachment"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "message", type = "string", required = true, scopable = false },
+  { name = "name", type = "string", required = true, scopable = false },
+  { name = "max_bytes", type = "int", required = false, scopable = false },
+]
+results = [
+  { name = "name", type = "string", required = true },
+  { name = "type", type = "string", required = true },
+  { name = "size", type = "int", required = true },
+  { name = "content", type = "bytes", required = true },
+]
+
+[[capability]]
+name = "mail.get"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "message", type = "string", required = true, scopable = false },
+  { name = "images", type = "bool", required = false, scopable = false },
+]
+results = [
+  { name = "from", type = "string", required = true },
+  { name = "to", type = "string", required = true },
+  { name = "cc", type = "string", required = true },
+  { name = "subject", type = "string", required = true },
+  { name = "date", type = "string", required = true },
+  { name = "time", type = "timestamp", required = true },
+  { name = "account", type = "string", required = true },
+  { name = "message_id", type = "string", required = true },
+  { name = "reply_to", type = "string", required = true },
+  { name = "references", type = "string", required = true },
+  { name = "text", type = "string", required = true },
+  { name = "html", type = "string", required = true },
+  { name = "blocks", type = "list", required = true },
+  { name = "blocked", type = "int", required = true },
+  { name = "attachments", type = "list", required = true },
+  { name = "size", type = "int", required = true },
+]
+
+[[capability]]
+name = "mail.append"
+effect = "local-write"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+  { name = "folder", type = "string", required = true, scopable = true },
+  { name = "content", type = "bytes", required = true, scopable = false },
+  { name = "seen", type = "bool", required = false, scopable = false },
+  { name = "draft", type = "bool", required = false, scopable = false },
+]
+results = [{ name = "message", type = "string", required = true }]
+
+[[capability]]
+name = "mail.accounts"
+effect = "read-only"
+dry_run = true
+params = [{ name = "check", type = "bool", required = false, scopable = false }]
+results = [{ name = "items", type = "list", required = true }]
+
+[[event]]
+type = "mail.received"
+fields = [
+  { name = "message", type = "string", required = true },
+  { name = "account", type = "string" },
+  { name = "folder", type = "string", required = true },
+  { name = "size", type = "int", required = true },
+  { name = "from", type = "string" },
+  { name = "to", type = "string" },
+  { name = "subject", type = "string" },
+  { name = "message_id", type = "string" },
+  { name = "cc", type = "string" },
+  { name = "date", type = "string" },
+  { name = "list_id", type = "string" },
+  { name = "precedence", type = "string" },
+  { name = "x_spam_flag", type = "string" },
+]
+
+[[event]]
+type = "mail.changed"
+fields = [
+  { name = "account", type = "string" },
+  { name = "folder", type = "string", required = true },
+  { name = "added", type = "int", required = true },
+  { name = "removed", type = "int", required = true },
+  { name = "changed", type = "int", required = true },
+]

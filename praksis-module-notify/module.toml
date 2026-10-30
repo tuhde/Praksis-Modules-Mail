@@ -1,0 +1,22 @@
+format_version = 1
+name = "notify"
+version = "0.1.0"
+module = "it.uhde.praksis.module.notify"
+jdk_modules = ["java.logging"]
+
+# Shows a notification on the desktop of the user the daemon runs as, with the program notify-send
+# (or the command in the settings). The text may come from a mail, so it is cleaned: it is passed
+# as arguments and never to a shell, control characters go, markup is escaped and it is cut.
+# No more than max_per_minute are shown; the rest are counted and added to the next one.
+[[capability]]
+name = "notify.show"
+effect = "local-write"
+dry_run = true
+params = [
+  { name = "title", type = "string", required = true, scopable = false },
+  { name = "body", type = "string", required = false, scopable = false },
+]
+results = [
+  { name = "shown", type = "bool", required = true },
+  { name = "suppressed", type = "int", required = true },
+]

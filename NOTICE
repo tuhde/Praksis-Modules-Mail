@@ -1,0 +1,11 @@
+Praksis-Modules-Mail
+Copyright 2026 Till Uhde
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The module archives of the IMAP, SMTP and contacts modules contain, as separate jar files:
+- Eclipse Angus Mail and Angus Activation, and the Jakarta Mail and Jakarta Activation APIs,
+  licensed under the Eclipse Public License 2.0 and the GNU General Public License 2 with the
+  Classpath Exception (https://github.com/eclipse-ee4j/angus-mail);
+- the IMAP module also contains jsoup (MIT License, https://jsoup.org) through the HTML
+  library of Praksis.

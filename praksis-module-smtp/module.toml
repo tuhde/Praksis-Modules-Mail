@@ -1,0 +1,114 @@
+format_version = 1
+name = "smtp"
+version = "0.1.0"
+module = "it.uhde.praksis.module.smtp"
+jdk_modules = ["java.desktop", "java.logging", "java.sql", "java.xml", "org.xerial.sqlitejdbc"]
+
+# mail.compose builds the message and sends nothing; mail.send builds and sends it. Both take the
+# same arguments. Addresses are written as in a mail header and separated by commas.
+[[capability]]
+name = "mail.compose"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+  { name = "to", type = "string", required = false, scopable = false },
+  { name = "cc", type = "string", required = false, scopable = false },
+  { name = "bcc", type = "string", required = false, scopable = false },
+  { name = "from", type = "string", required = false, scopable = false },
+  { name = "subject", type = "string", required = false, scopable = false },
+  { name = "text", type = "string", required = false, scopable = false },
+  { name = "html", type = "string", required = false, scopable = false },
+  { name = "in_reply_to", type = "string", required = false, scopable = false },
+  { name = "references", type = "string", required = false, scopable = false },
+  { name = "attachments", type = "list", required = false, scopable = false },
+]
+results = [
+  { name = "message_id", type = "string", required = true },
+  { name = "raw", type = "bytes", required = true },
+  { name = "recipients", type = "int", required = true },
+]
+
+[[capability]]
+name = "mail.send"
+effect = "external"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+  { name = "to", type = "string", required = true, scopable = true },
+  { name = "cc", type = "string", required = false, scopable = true },
+  { name = "bcc", type = "string", required = false, scopable = true },
+  { name = "from", type = "string", required = false, scopable = true },
+  { name = "subject", type = "string", required = true, scopable = false },
+  { name = "text", type = "string", required = false, scopable = false },
+  { name = "html", type = "string", required = false, scopable = false },
+  { name = "in_reply_to", type = "string", required = false, scopable = false },
+  { name = "references", type = "string", required = false, scopable = false },
+  { name = "attachments", type = "list", required = false, scopable = false },
+]
+results = [
+  { name = "message_id", type = "string", required = true },
+  { name = "raw", type = "bytes", required = true },
+  { name = "recipients", type = "int", required = true },
+]
+
+# The starting point of an answer: who to write to, the subject, the threading headers and the text
+# with the mail quoted. The arguments are the fields of mail.get. Nothing is read or sent.
+[[capability]]
+name = "mail.reply"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+  { name = "from", type = "string", required = false, scopable = false },
+  { name = "to", type = "string", required = false, scopable = false },
+  { name = "cc", type = "string", required = false, scopable = false },
+  { name = "subject", type = "string", required = false, scopable = false },
+  { name = "date", type = "string", required = false, scopable = false },
+  { name = "message_id", type = "string", required = false, scopable = false },
+  { name = "text", type = "string", required = false, scopable = false },
+  { name = "signature", type = "string", required = false, scopable = false },
+  { name = "reply_to", type = "string", required = false, scopable = false },
+  { name = "references", type = "string", required = false, scopable = false },
+  { name = "all", type = "bool", required = false, scopable = false },
+]
+results = [
+  { name = "to", type = "string", required = true },
+  { name = "cc", type = "string", required = true },
+  { name = "subject", type = "string", required = true },
+  { name = "text", type = "string", required = true },
+  { name = "in_reply_to", type = "string", required = true },
+  { name = "references", type = "string", required = true },
+]
+
+[[capability]]
+name = "mail.forward"
+effect = "read-only"
+dry_run = true
+params = [
+  { name = "account", type = "string", required = false, scopable = true },
+  { name = "from", type = "string", required = false, scopable = false },
+  { name = "to", type = "string", required = false, scopable = false },
+  { name = "cc", type = "string", required = false, scopable = false },
+  { name = "subject", type = "string", required = false, scopable = false },
+  { name = "date", type = "string", required = false, scopable = false },
+  { name = "message_id", type = "string", required = false, scopable = false },
+  { name = "text", type = "string", required = false, scopable = false },
+  { name = "signature", type = "string", required = false, scopable = false },
+]
+results = [
+  { name = "to", type = "string", required = true },
+  { name = "cc", type = "string", required = true },
+  { name = "subject", type = "string", required = true },
+  { name = "text", type = "string", required = true },
+  { name = "in_reply_to", type = "string", required = true },
+  { name = "references", type = "string", required = true },
+]
+
+# The accounts that can send, for a screen that shows them.
+[[capability]]
+name = "mail.senders"
+effect = "read-only"
+dry_run = true
+params = []
+results = [{ name = "items", type = "list", required = true }]
