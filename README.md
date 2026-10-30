@@ -35,6 +35,10 @@ It is code that runs with the rights of the daemon: install what you trust. Sett
 passwords through a credential binding in `policy.toml`. The ruleset
 [Praksis-Mail](https://github.com/tuhde/Praksis-Mail) describes both in detail.
 
+A module declares the capability API it was built for as `api_version` in its `module.toml`. A
+Praksis with another version refuses it at install and at start, and says whether to update the
+module or Praksis; build these modules against the core that you run.
+
 ## The mail contract
 
 Every mail backend (`maildir` in the core, `imap` here) provides the same names, so one mail
