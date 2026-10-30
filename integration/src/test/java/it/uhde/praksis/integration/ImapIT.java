@@ -110,7 +110,7 @@ class ImapIT {
       Process daemon = h.startDaemon();
       Harness.await("all mails to be archived", () -> server.count("Archive") == 5);
       assertThat(server.count("INBOX")).isZero();
-      assertThat(h.status().modules()).containsExactly("imap");
+      assertThat(h.status().modules()).containsExactly("imap", "praksis");
       assertThat(h.log()).extracting(l -> l.outcome()).doesNotContain("FAILED");
 
       // the password came through the binding: asked for by name, audited, never shown
