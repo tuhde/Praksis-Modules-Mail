@@ -3,9 +3,15 @@ Copyright 2026 Till Uhde
 
 This product is licensed under the Apache License, Version 2.0 (see LICENSE).
 
-The module archives of the IMAP, SMTP and contacts modules contain, as separate jar files:
-- Eclipse Angus Mail and Angus Activation, and the Jakarta Mail and Jakarta Activation APIs,
-  licensed under the Eclipse Public License 2.0 and the GNU General Public License 2 with the
-  Classpath Exception (https://github.com/eclipse-ee4j/angus-mail);
-- the IMAP module also contains jsoup (MIT License, https://jsoup.org) through the HTML
-  library of Praksis.
+The module archives contain the following third-party software as separate jar files. Each keeps
+its own license.
+- Eclipse Angus Mail and the Jakarta Mail API (imap, smtp, contacts) - Eclipse Public License 2.0
+  or GNU General Public License 2 with the Classpath Exception
+  https://github.com/eclipse-ee4j/angus-mail
+- Eclipse Angus Activation and the Jakarta Activation API (imap, smtp, contacts) - BSD 3-Clause
+  License (Eclipse Distribution License 1.0) https://github.com/eclipse-ee4j/angus-activation
+- jsoup 1.22.1 (imap, through the HTML library of Praksis) - MIT License https://jsoup.org
+
+sqlite-jdbc, which the IMAP and SMTP modules use, is provided by the runtime image of Praksis and
+is listed in its NOTICE. What is used only to build and test (JUnit, AssertJ, GreenMail) is not
+part of what is shipped.
